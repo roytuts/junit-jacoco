@@ -1,0 +1,40 @@
+plugins {
+    id 'java-library'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.5" //jacoco version
+    reportsDir = file("$buildDir/reports/jacoco") //default directory where jacoco generates test reports
+}
+
+//if you want to use custom report format then uncomment below task 
+//use command "gradle build jacocoTestReport" to generate reports using below task
+/*jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/reports/jacoco"
+    }
+}
+
+test {
+    ignoreFailures = true //build success even when test failure occurs
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}*/
+
+sourceCompatibility = 12
+targetCompatibility = 12
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	testImplementation('junit:junit:4.12') {
+        exclude group: 'org.hamcrest'
+    }
+    
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+}
