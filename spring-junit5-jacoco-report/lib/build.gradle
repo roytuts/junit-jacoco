@@ -1,0 +1,68 @@
+buildscript {
+  	ext {
+    	springBootVersion = '2.6.6'
+  	}
+ 
+  	repositories {
+    	mavenCentral()
+  	}
+ 
+  	dependencies {
+    	classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    	classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
+  	}
+}
+ 
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id "org.sonarqube" version "3.3"
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+sonarqube {
+    properties {
+    	property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco.xml"
+    	property "sonar.junit.reportPath", "${project.buildDir}/reports/jacoco.xml"
+    	property "sonar.verbose", true
+    	property "sonar.sources", "src/main"
+    	property "sonar.tests", "src/test"
+    	property "sonar.host.url", "http://localhost:9000"
+        property "sonar.projectName", "Spring Junit 5 Sonar Jacoco Report"
+        property "sonar.projectKey", "com.roytuts:spring-junit5-jacoco-report"
+        property "sonar.login", "4b0f11b3e2ef5aa4b62144899af888baa85ee524"
+    }
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+ 
+sourceCompatibility = 11
+targetCompatibility = 11
+ 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	implementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+}
+
+/*tasks.named('test') {
+    useJUnitPlatform()
+}*/
+
